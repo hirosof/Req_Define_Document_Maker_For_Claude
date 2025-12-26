@@ -16,6 +16,7 @@ Claudeに依頼するための要求仕様書を作成するツール。ユー�
 - Claude向けの最適化されたプロンプトを自動生成
 - Markdown形式の要求仕様書を出力
 - クリップボードコピーとファイル保存機能
+- ダークモード切り替え機能（設定を自動保存）
 
 ## プロジェクト構造
 
@@ -28,10 +29,15 @@ Req_Define_Document_Maker_For_Claude/
 │   └── template.js     # テンプレート生成（要求仕様書、プロンプト）
 ├── DesktopApp/          # C# WPFデスクトップアプリ版
 │   └── ReqDefineDocumentMaker/
-│       ├── MainWindow.xaml           # UIデザイン
-│       ├── MainWindow.xaml.cs        # UIロジック
-│       ├── TemplateGenerator.cs      # テンプレート生成クラス
+│       ├── App.xaml                   # アプリケーションリソース定義
+│       ├── App.xaml.cs                # アプリケーションエントリーポイント
+│       ├── MainWindow.xaml            # UIデザイン
+│       ├── MainWindow.xaml.cs         # UIロジック
+│       ├── TemplateGenerator.cs       # テンプレート生成クラス
 │       └── ReqDefineDocumentMaker.csproj
+├── Specifications/      # 仕様書
+│   ├── WebApp_Specification.md        # Webアプリ版仕様書
+│   └── DesktopApp_Specification.md    # デスクトップアプリ版仕様書
 ├── CLAUDE.MD            # プロジェクトガイド（Claude向け）
 └── README.md            # このファイル
 ```
@@ -136,12 +142,16 @@ dotnet run
 - ✅ 要求仕様書テンプレート項目の確定
 - ✅ Webアプリのプロトタイプ作成
 - ✅ 基本機能の実装（入力、生成、コピー、保存）
-- ✅ C# WPFデスクトップアプリの実装
+- ✅ C# WPF (.NET 8) デスクトップアプリの実装
+- ✅ クリップボードコピーの問題解決（TextBoxBase.Copy()を使用）
+- ✅ ダークモード機能の実装（Web版・デスクトップ版両方）
+- ✅ 詳細仕様書の作成
 
 ### 今後の可能性
 - 過去の仕様書の保存・読み込み機能
 - テンプレートのカスタマイズ機能
 - プロジェクトタイプ別のプリセット
+- Claude APIとの直接連携機能
 
 ## 技術スタック
 
@@ -159,6 +169,33 @@ dotnet run
 
 このプロジェクトは個人利用を目的としています。
 
+## ドキュメント
+
+詳細な仕様書は以下を参照してください：
+
+- **Webアプリ版**: [Specifications/WebApp_Specification.md](Specifications/WebApp_Specification.md)
+- **デスクトップアプリ版**: [Specifications/DesktopApp_Specification.md](Specifications/DesktopApp_Specification.md)
+- **プロジェクトガイド**: [CLAUDE.md](CLAUDE.md)
+
+## トラブルシューティング
+
+### Webアプリ版
+
+**問題: クリップボードにコピーできない**
+- 解決方法: ブラウザのクリップボード権限を許可してください。HTTPSでない場合は動作しないことがあります。
+
+**問題: ファイル保存ができない**
+- 解決方法: ブラウザのダウンロード設定を確認してください。ポップアップブロックが有効な場合は無効化してください。
+
+### デスクトップアプリ版
+
+**問題: アプリが起動しない**
+- 解決方法: .NET 8 Runtimeがインストールされているか確認してください。
+
+**問題: クリップボードコピーでエラーが発生する（環境依存）**
+- 原因: ウイルス対策ソフトの「クリップボード保護」機能が干渉している可能性があります。
+- 解決方法: 現在の実装では`TextBoxBase.Copy()`を使用しており、ほとんどの環境でエラーは発生しません。それでもエラーが発生する場合は「ファイル保存」機能をご利用ください。
+
 ## 更新履歴
 
 - 2025-12-27: プロジェクト開始、Webアプリプロトタイプ作成
@@ -166,4 +203,7 @@ dotnet run
 - 2025-12-27: フィードバック反映（アプリケーション種類追加、言語/フレームワーク分離、セクション順序変更）
 - 2025-12-27: 環境を開発環境と本番環境に分離、本番環境に「開発環境と同じ」選択肢追加
 - 2025-12-27: フォルダ構造整理（WebApp/とDesktopApp/に分離）
-- 2025-12-27: C# WPFデスクトップアプリの実装完了
+- 2025-12-27: C# WPF (.NET 8) デスクトップアプリの実装完了
+- 2025-12-27: クリップボードコピーの問題解決（TextBoxBase.Copy()を使用）
+- 2025-12-27: ダークモード機能の実装（Web版・デスクトップ版両方）
+- 2025-12-27: 詳細仕様書の作成（Specificationsフォルダに配置）
