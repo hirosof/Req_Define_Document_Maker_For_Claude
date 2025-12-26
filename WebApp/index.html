@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>要求仕様書作成ツール for Claude</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>要求仕様書作成ツール for Claude</h1>
+            <p class="subtitle">Claude に依頼するための要求仕様書を作成します</p>
+            <button type="button" id="themeToggle" class="theme-toggle" title="ダークモード切り替え">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <form id="reqForm">
+            <!-- 基本情報 -->
+            <section class="form-section">
+                <h2>基本情報</h2>
+
+                <div class="form-group">
+                    <label for="projectName">プロジェクト名</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="projectName" name="projectName" placeholder="例: タスク管理アプリ">
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="projectName" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="projectName" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="overview">概要/目的</label>
+                    <div class="input-wrapper">
+                        <textarea id="overview" name="overview" rows="4" placeholder="このプロジェクトの目的や背景を記述してください"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="overview" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="overview" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="targetUser">対象ユーザー</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="targetUser" name="targetUser" placeholder="例: 個人開発者、小規模チーム">
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="targetUser" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="targetUser" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 技術要件 -->
+            <section class="form-section">
+                <h2>技術要件</h2>
+
+                <div class="form-group">
+                    <label for="appType">アプリケーション種類</label>
+                    <div class="input-wrapper">
+                        <select id="appType" name="appType">
+                            <option value="">選択してください</option>
+                            <option value="CLI">CLIツール（コンソールアプリケーション）</option>
+                            <option value="Desktop">デスクトップアプリケーション</option>
+                            <option value="Web">Webアプリケーション</option>
+                            <option value="Other">その他</option>
+                        </select>
+                        <input type="text" id="appTypeOther" name="appTypeOther" placeholder="その他の場合は入力してください" style="display: none; margin-top: 8px;">
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="appType" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="appType" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="language">使用言語</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="language" name="language" placeholder="例: JavaScript, Python, C#">
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="language" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="language" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="framework">フレームワーク/ライブラリ</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="framework" name="framework" placeholder="例: React, Django, .NET">
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="framework" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="framework" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="devEnvironment">開発環境</label>
+                    <div class="input-wrapper">
+                        <textarea id="devEnvironment" name="devEnvironment" rows="3" placeholder="例: Windows 11, Node.js 20, Visual Studio Code"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="devEnvironment" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="devEnvironment" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prodEnvironment">本番環境</label>
+                    <div class="input-wrapper">
+                        <select id="prodEnvironmentSelect" name="prodEnvironmentSelect">
+                            <option value="">選択してください</option>
+                            <option value="SameAsDev">開発環境と同じ</option>
+                            <option value="Custom">個別に指定</option>
+                        </select>
+                        <textarea id="prodEnvironment" name="prodEnvironment" rows="3" placeholder="例: Webホスティング、クラウドサーバー" style="display: none; margin-top: 8px;"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="prodEnvironment" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="prodEnvironment" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="constraints">制約事項</label>
+                    <div class="input-wrapper">
+                        <textarea id="constraints" name="constraints" rows="3" placeholder="例: インターネット接続不要で動作すること"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="constraints" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="constraints" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 機能要件 -->
+            <section class="form-section">
+                <h2>機能要件</h2>
+
+                <div class="form-group">
+                    <label for="mainFeatures">主要機能</label>
+                    <div class="input-wrapper">
+                        <textarea id="mainFeatures" name="mainFeatures" rows="5" placeholder="例:&#10;- タスクの作成・編集・削除&#10;- タスクの優先度設定&#10;- 期限管理"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="mainFeatures" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="mainFeatures" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="uiRequirements">画面/UI要件</label>
+                    <div class="input-wrapper">
+                        <textarea id="uiRequirements" name="uiRequirements" rows="4" placeholder="例: シンプルで直感的なUI、ダークモード対応"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="uiRequirements" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="uiRequirements" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataRequirements">データ要件</label>
+                    <div class="input-wrapper">
+                        <textarea id="dataRequirements" name="dataRequirements" rows="4" placeholder="例: ローカルストレージに保存、データのエクスポート機能"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="dataRequirements" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="dataRequirements" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- その他 -->
+            <section class="form-section">
+                <h2>その他</h2>
+
+                <div class="form-group">
+                    <label for="references">参考資料</label>
+                    <div class="input-wrapper">
+                        <textarea id="references" name="references" rows="3" placeholder="例: URL、参考にしたい既存アプリ、ドキュメントへのパス"></textarea>
+                        <div class="option-buttons">
+                            <button type="button" class="option-btn" data-field="references" data-value="お任せ">お任せ</button>
+                            <button type="button" class="option-btn" data-field="references" data-value="別途議論">別途議論</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ボタン -->
+            <div class="action-buttons">
+                <button type="button" id="generateBtn" class="btn btn-primary">要求仕様書を生成</button>
+                <button type="button" id="clearBtn" class="btn btn-secondary">クリア</button>
+            </div>
+        </form>
+
+        <!-- 出力エリア -->
+        <div id="outputArea" class="output-area" style="display: none;">
+            <h2>生成結果</h2>
+
+            <div class="output-section">
+                <div class="output-header">
+                    <h3>一次要求仕様書（Markdown）</h3>
+                    <div class="output-actions">
+                        <button type="button" id="copySpecBtn" class="btn btn-small">クリップボードにコピー</button>
+                        <button type="button" id="downloadSpecBtn" class="btn btn-small">ファイル保存</button>
+                    </div>
+                </div>
+                <pre id="specOutput" class="output-content"></pre>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">
+                    <h3>Claude向けプロンプト</h3>
+                    <div class="output-actions">
+                        <button type="button" id="copyPromptBtn" class="btn btn-small">クリップボードにコピー</button>
+                        <button type="button" id="downloadPromptBtn" class="btn btn-small">ファイル保存</button>
+                    </div>
+                </div>
+                <pre id="promptOutput" class="output-content"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="template.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
